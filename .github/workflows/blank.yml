@@ -1,0 +1,64 @@
+
+services:
+  pc-virtual:
+    image: lscr.io/linuxserver/webtop:ubuntu-xfce
+    container_name: pc-virtual-5090
+    hostname: PC-GAMER
+    restart: unless-stopped
+
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+      - TITLE=PC Virtual Gamer RTX 5090
+      - CUSTOM_USER=admin
+      - PASSWORD=TroqueEssaSenha
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+
+    volumes:
+      - ./config:/config
+      - ./downloads:/config/Downloads
+      - ./documents:/config/Documents
+      - ./desktop:/config/Desktop
+
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+
+    gpus: all
+
+    mem_limit: 16g
+    shm_size: 2gb
+
+    security_opt:
+      - seccomp:unconfined
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+    labels:
+      - "app.name=PC Virtual Gamer"
+      - "app.gpu=NVIDIA RTX 5090"
+      - "app.vram=32GB"
+      - "app.ram=16GB"
+      - "app.os=Ubuntu XFCE"
+      - "app.type=Virtual Desktop"
+
+# =================================
+# CONFIGURAÇÃO DO PC VIRTUAL
+# =================================
+# GPU: NVIDIA RTX 5090
+# VRAM: 32 GB
+# RAM: limite de 16 GB
+# SISTEMA: Ubuntu XFCE
+# ACESSO: navegador
+# PORTA HTTP: 3000
+# PORTA HTTPS: 3001
+# ARMAZENAMENTO: persistente
+# REINICIALIZAÇÃO: automática
+# =================================
